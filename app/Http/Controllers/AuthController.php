@@ -51,7 +51,8 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             
-            return $this->redirectToDashboard(Auth::user());
+            $user = Auth::user();
+            return $this->redirectToDashboard($user);
         }
 
         return back()->withErrors([

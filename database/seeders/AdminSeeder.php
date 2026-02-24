@@ -19,6 +19,7 @@ class AdminSeeder extends Seeder
             'email' => 'admin@nepsole.com',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
+            'email_verified_at' => now(),
         ]);
 
         $this->command->info('Admin user created successfully!');
