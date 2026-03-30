@@ -4,117 +4,65 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Order;
+use App\Models\Vendor;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Get statistics
-        $stats = [
-            'total_customers' => User::where('role', 'customer')->count(),
-            'total_vendors' => User::where('role', 'vendor')->count(),
-            'total_orders' => Order::count(),
-            'total_revenue' => Order::where('status', 'completed')->sum('total_amount'),
-            'pending_orders' => Order::where('status', 'pending')->count(),
+        // Get total users (customers)
+        $totalUsers = User::where('role', 'customer')->count();
+        
+        // Get total vendors
+        $totalVendors = Vendor::count();
+        
+        // Get total products
+        $totalProducts = \App\Models\Product::count();
+        
+        // Get orders dispatched count
+        $ordersDispatched = \App\Models\Order::where('order_status', 'dispatched')->count();
+        
+        // Get vendor revenue data
+        $vendorRevenueData = $this->getVendorRevenueData();
+        
+        return view('admin.dashboard', compact('totalUsers', 'totalVendors', 'totalProducts', 'ordersDispatched', 'vendorRevenueData'));
+    }
+    
+    private function getVendorRevenueData()
+    {
+        // Get weekly revenue (last 7 days)
+        $weeklyRevenue = OrderItem::select('order_items.vendor_id', 'vendors.business_name as vendor_name', DB::raw('SUM(order_items.total_price) as revenue'))
+            ->join('vendors', 'order_items.vendor_id', '=', 'vendors.id')
+            ->where('order_items.created_at', '>=', Carbon::now()->subDays(7))
+            ->where('order_items.status', 'confirmed')
+            ->groupBy('order_items.vendor_id', 'vendors.business_name')
+            ->get();
+        
+        // Get monthly revenue (last 30 days)
+        $monthlyRevenue = OrderItem::select('order_items.vendor_id', 'vendors.business_name as vendor_name', DB::raw('SUM(order_items.total_price) as revenue'))
+            ->join('vendors', 'order_items.vendor_id', '=', 'vendors.id')
+            ->where('order_items.created_at', '>=', Carbon::now()->subDays(30))
+            ->where('order_items.status', 'confirmed')
+            ->groupBy('order_items.vendor_id', 'vendors.business_name')
+            ->get();
+        
+        // Get yearly revenue (last 365 days)
+        $yearlyRevenue = OrderItem::select('order_items.vendor_id', 'vendors.business_name as vendor_name', DB::raw('SUM(order_items.total_price) as revenue'))
+            ->join('vendors', 'order_items.vendor_id', '=', 'vendors.id')
+            ->where('order_items.created_at', '>=', Carbon::now()->subDays(365))
+            ->where('order_items.status', 'confirmed')
+            ->groupBy('order_items.vendor_id', 'vendors.business_name')
+            ->get();
+        
+        return [
+            'weekly' => $weeklyRevenue,
+            'monthly' => $monthlyRevenue,
+            'yearly' => $yearlyRevenue
         ];
-
-        // Get recent orders
-        $recentOrders = Order::with(['customer', 'vendor'])
-            ->latest()
-            ->take(10)
-            ->get();
-
-        // Get monthly revenue
-        $monthlyRevenue = Order::where('status', 'completed')
-            ->select(
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('SUM(total_amount) as revenue')
-            )
-            ->whereYear('created_at', date('Y'))
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        // Get top customers
-        $topCustomers = User::where('role', 'customer')
-            ->withCount('ordersAsCustomer')
-            ->withSum('ordersAsCustomer', 'total_amount')
-            ->orderByDesc('orders_as_customer_sum_total_amount')
-            ->take(5)
-            ->get();
-
-        // Get top vendors
-        $topVendors = User::where('role', 'vendor')
-            ->withCount('ordersAsVendor')
-            ->withSum('ordersAsVendor', 'total_amount')
-            ->orderByDesc('orders_as_vendor_sum_total_amount')
-            ->take(5)
-            ->get();
-
-        return view('admin.dashboard', compact(
-            'stats',
-            'recentOrders',
-            'monthlyRevenue',
-            'topCustomers',
-            'topVendors'
-        ));
-    }
-
-    public function customers()
-    {
-        $customers = User::where('role', 'customer')
-            ->withCount('ordersAsCustomer')
-            ->withSum('ordersAsCustomer', 'total_amount')
-            ->latest()
-            ->paginate(20);
-
-        return view('admin.customers', compact('customers'));
-    }
-
-    public function vendors()
-    {
-        $vendors = User::where('role', 'vendor')
-            ->withCount('ordersAsVendor')
-            ->withSum('ordersAsVendor', 'total_amount')
-            ->latest()
-            ->paginate(20);
-
-        return view('admin.vendors', compact('vendors'));
-    }
-
-    public function deleteUser($id)
-    {
-        $user = User::findOrFail($id);
-        
-        if ($user->role === 'admin') {
-            return back()->with('error', 'Cannot delete admin users!');
-        }
-
-        $user->delete();
-        return back()->with('success', 'User deleted successfully!');
-    }
-
-    public function toggleUserStatus($id)
-    {
-        $user = User::findOrFail($id);
-        
-        if ($user->role === 'admin') {
-            return back()->with('error', 'Cannot modify admin users!');
-        }
-
-        // Toggle email verification (as a way to enable/disable users)
-        if ($user->email_verified_at) {
-            $user->email_verified_at = null;
-            $message = 'User disabled successfully!';
-        } else {
-            $user->email_verified_at = now();
-            $message = 'User enabled successfully!';
-        }
-        
-        $user->save();
-        return back()->with('success', $message);
     }
 }
+

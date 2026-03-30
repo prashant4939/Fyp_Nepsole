@@ -77,20 +77,4 @@ class User extends Authenticatable
     {
         $this->notify(new \App\Notifications\CustomVerifyEmail);
     }
-
-    /**
-     * Orders where user is customer
-     */
-    public function ordersAsCustomer()
-    {
-        return $this->hasMany(Order::class, 'customer_id');
-    }
-
-    /**
-     * Orders where user is vendor
-     */
-    public function ordersAsVendor()
-    {
-        return $this->hasMany(Order::class, 'vendor_id');
-    }
 }

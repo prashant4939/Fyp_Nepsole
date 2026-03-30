@@ -58,10 +58,17 @@
 
         .auth-title {
             text-align: center;
-            color: #9ca3af;
-            font-size: 16px;
+            color: #1f2937;
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
             margin-bottom: 32px;
-            font-weight: 500;
         }
 
         .form-group {
@@ -134,6 +141,31 @@
         }
 
         .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .vendor-notice {
+            text-align: center;
+            margin-top: 20px;
+            padding: 16px;
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+        }
+
+        .vendor-notice p {
+            color: #0c4a6e;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .vendor-notice a {
+            color: #0ea5e9;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .vendor-notice a:hover {
             text-decoration: underline;
         }
     </style>
