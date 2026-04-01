@@ -29,12 +29,7 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'product_variant_id' => 'required|exists:product_variants,id',
-            'quantity' => 'required|integer|min:1'
-        ]);
-
+        // Must be JSON response for all failures since this is an AJAX endpoint
         if (!Auth::check()) {
             return response()->json([
                 'success' => false,
@@ -42,11 +37,17 @@ class CartController extends Controller
             ], 401);
         }
 
-        $product = Product::findOrFail($request->product_id);
-        $variant = \App\Models\ProductVariant::findOrFail($request->product_variant_id);
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'product_variant_id' => 'required|exists:product_variants,id',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        $product = Product::findOrFail($validated['product_id']);
+        $variant = \App\Models\ProductVariant::findOrFail($validated['product_variant_id']);
 
         // Check stock availability
-        if ($variant->stock < $request->quantity) {
+        if ($variant->stock < $validated['quantity']) {
             return response()->json([
                 'success' => false,
                 'message' => 'Insufficient stock. Available: ' . $variant->stock
@@ -55,34 +56,31 @@ class CartController extends Controller
 
         // Check if item with same variant already exists in cart
         $cartItem = Cart::where('user_id', Auth::id())
-            ->where('product_id', $request->product_id)
-            ->where('product_variant_id', $request->product_variant_id)
+            ->where('product_id', $validated['product_id'])
+            ->where(function($q) use ($validated) {
+                $q->where('product_variant_id', $validated['product_variant_id']);
+            })
             ->first();
 
         if ($cartItem) {
-            // Check if new quantity exceeds stock
-            $newQuantity = $cartItem->quantity + $request->quantity;
+            $newQuantity = $cartItem->quantity + $validated['quantity'];
             if ($newQuantity > $variant->stock) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Cannot add more. Stock limit: ' . $variant->stock
                 ], 400);
             }
-            
-            // Update quantity
             $cartItem->quantity = $newQuantity;
             $cartItem->save();
         } else {
-            // Create new cart item
             Cart::create([
                 'user_id' => Auth::id(),
-                'product_id' => $request->product_id,
-                'product_variant_id' => $request->product_variant_id,
-                'quantity' => $request->quantity
+                'product_id' => $validated['product_id'],
+                'product_variant_id' => $validated['product_variant_id'],
+                'quantity' => $validated['quantity']
             ]);
         }
 
-        // Get updated cart count
         $cartCount = Cart::where('user_id', Auth::id())->sum('quantity');
 
         return response()->json([
