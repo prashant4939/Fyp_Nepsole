@@ -4,7 +4,16 @@
         <div class="top-container">
             <div class="logo-section">
                 <a href="/" class="logo">
-                    <span class="logo-text">NEPSOLE</span>
+                    <div class="logo-mark">
+                        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="36" height="36" rx="8" fill="#6366f1"/>
+                            <rect x="7" y="7" width="9" height="9" rx="2" stroke="white" stroke-width="1.8" fill="none"/>
+                            <rect x="20" y="7" width="9" height="5" rx="2" stroke="white" stroke-width="1.8" fill="none"/>
+                            <rect x="20" y="16" width="9" height="11" rx="2" stroke="white" stroke-width="1.8" fill="none"/>
+                            <rect x="7" y="20" width="9" height="9" rx="2" stroke="white" stroke-width="1.8" fill="none"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">NepSole</span>
                 </a>
             </div>
             
@@ -71,6 +80,49 @@
                         🛒
                         <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
                     </a>
+                    @auth
+                    <div class="settings-dropdown-wrap">
+                        <button class="settings-icon-btn" onclick="toggleSettingsDropdown(event)" title="Settings" aria-label="Settings">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </button>
+                        <div class="settings-dropdown-menu" id="settingsDropdownMenu">
+                            <div class="settings-dropdown-header">
+                                <div class="sd-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                                <div>
+                                    <div class="sd-name">{{ auth()->user()->name }}</div>
+                                    <div class="sd-role">{{ ucfirst(auth()->user()->role) }}</div>
+                                </div>
+                            </div>
+                            <div class="sd-divider"></div>
+                            <a href="{{ route('settings.profile') }}" class="sd-item">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                View Profile
+                            </a>
+                            <a href="{{ route('settings.change-password') }}" class="sd-item">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                                Change Password
+                            </a>
+                            <div class="sd-divider"></div>
+                            <a href="#" class="sd-item sd-logout"
+                               onclick="event.preventDefault(); document.getElementById('settings-logout-form').submit();">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                </svg>
+                                Logout
+                            </a>
+                            <form id="settings-logout-form" method="POST" action="{{ route('logout') }}" style="display:none;">
+                                @csrf
+                            </form>
+                        </div>
+                    </div>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -179,11 +231,25 @@
         text-decoration: none;
     }
 
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+    }
+
+    .logo-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
     .logo-text {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 700;
-        color: #1f2937;
-        letter-spacing: 1px;
+        color: #6366f1;
+        letter-spacing: -0.3px;
     }
 
     /* Search Section */
@@ -501,6 +567,131 @@
             margin-top: 0.5rem;
         }
     }
+    /* Settings Dropdown */
+    .settings-dropdown-wrap {
+        position: relative;
+    }
+
+    .settings-icon-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        border: 1.5px solid #e5e7eb;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #6b7280;
+        transition: all 0.2s;
+        padding: 0;
+    }
+
+    .settings-icon-btn:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+        background: #eef2ff;
+    }
+
+    .settings-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        min-width: 220px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: all 0.2s;
+        z-index: 1100;
+    }
+
+    .settings-dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .settings-dropdown-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border-radius: 11px 11px 0 0;
+    }
+
+    .sd-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.25);
+        border: 2px solid rgba(255,255,255,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .sd-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+    }
+
+    .sd-role {
+        font-size: 11px;
+        color: rgba(255,255,255,0.75);
+        text-transform: capitalize;
+    }
+
+    .sd-divider {
+        height: 1px;
+        background: #f3f4f6;
+        margin: 0;
+    }
+
+    .sd-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.25rem;
+        color: #374151;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background 0.15s;
+    }
+
+    .sd-item:hover {
+        background: #f3f4f6;
+        color: #6366f1;
+    }
+
+    .sd-item svg {
+        flex-shrink: 0;
+        color: #9ca3af;
+    }
+
+    .sd-item:hover svg {
+        color: #6366f1;
+    }
+
+    .sd-logout:hover {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .sd-logout:hover svg {
+        color: #dc2626;
+    }
+
 </style>
 
 <script>
@@ -516,21 +707,37 @@
     document.addEventListener('click', function(event) {
         const dropdown = document.getElementById('userDropdownMenu');
         const userIcon = event.target.closest('.user-dropdown');
-        
         if (!userIcon && dropdown) {
             dropdown.classList.remove('show');
         }
-    });
 
-    // Close dropdown when pressing Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            const dropdown = document.getElementById('userDropdownMenu');
-            if (dropdown) {
-                dropdown.classList.remove('show');
-            }
+        // Close settings dropdown too
+        const settingsMenu = document.getElementById('settingsDropdownMenu');
+        const settingsWrap = event.target.closest('.settings-dropdown-wrap');
+        if (!settingsWrap && settingsMenu) {
+            settingsMenu.classList.remove('show');
         }
     });
+
+    // Close dropdowns on Escape
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const d1 = document.getElementById('userDropdownMenu');
+            const d2 = document.getElementById('settingsDropdownMenu');
+            if (d1) d1.classList.remove('show');
+            if (d2) d2.classList.remove('show');
+        }
+    });
+
+    function toggleSettingsDropdown(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        // Close user dropdown if open
+        const userMenu = document.getElementById('userDropdownMenu');
+        if (userMenu) userMenu.classList.remove('show');
+        // Toggle settings dropdown
+        document.getElementById('settingsDropdownMenu').classList.toggle('show');
+    }
 
     // Update cart count on page load
     function updateCartCount() {

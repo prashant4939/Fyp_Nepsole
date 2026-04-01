@@ -131,6 +131,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+
+    // Settings routes
+    Route::get('/profile', [\App\Http\Controllers\SettingsController::class, 'profile'])->name('settings.profile');
+    Route::get('/edit-profile', [\App\Http\Controllers\SettingsController::class, 'editProfile'])->name('settings.edit-profile');
+    Route::put('/edit-profile', [\App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.update-profile');
+    Route::get('/change-password', [\App\Http\Controllers\SettingsController::class, 'changePassword'])->name('settings.change-password');
+    Route::put('/change-password', [\App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.update-password');
     
     // Vendor routes
     Route::middleware('role:vendor')->prefix('vendor')->name('vendor.')->group(function () {
