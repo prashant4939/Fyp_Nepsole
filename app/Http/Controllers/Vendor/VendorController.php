@@ -39,38 +39,55 @@ class VendorController extends Controller
             'password' => ['required'],
         ]);
 
-        $credentials = $request->only('email', 'password');
+        // First check if user exists with this email
+        $user = User::where('email', $request->email)->first();
 
-        if (auth()->attempt($credentials, $request->filled('remember'))) {
-            $user = auth()->user();
-
-            // Check if user is a vendor
-            if ($user->role !== 'vendor') {
-                auth()->logout();
-                return back()->withErrors(['email' => 'These credentials do not match a vendor account.']);
-            }
-
-            // Check if vendor is approved
-            $vendor = $user->vendor;
-            if (!$vendor || !$vendor->is_verified) {
-                auth()->logout();
-                return redirect()->route('vendor.pending')
-                    ->with('error', 'Your vendor account is pending approval. Please wait for admin verification.');
-            }
-
-            // Check if vendor is active
-            if (!$vendor->is_active) {
-                auth()->logout();
-                return back()->withErrors(['email' => 'Your vendor account has been deactivated. Please contact support.']);
-            }
-
-            $request->session()->regenerate();
-            return redirect()->route('vendor.dashboard');
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'No account found with this email address.',
+            ])->onlyInput('email');
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        // Check if this is a vendor account
+        if ($user->role !== 'vendor') {
+            return back()->withErrors([
+                'email' => 'This email is not registered as a vendor account.',
+            ])->onlyInput('email');
+        }
+
+        // Verify password
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->withErrors([
+                'email' => 'The password you entered is incorrect.',
+            ])->onlyInput('email');
+        }
+
+        // Check vendor profile exists
+        $vendor = $user->vendor;
+        if (!$vendor) {
+            return back()->withErrors([
+                'email' => 'Vendor profile not found. Please contact support.',
+            ])->onlyInput('email');
+        }
+
+        // Check if vendor is approved (verified)
+        if (!$vendor->is_verified) {
+            return redirect()->route('vendor.pending')
+                ->with('error', 'Your vendor account is pending approval. Please wait for admin verification.');
+        }
+
+        // Check if vendor is active
+        if (!$vendor->is_active) {
+            return back()->withErrors([
+                'email' => 'Your vendor account has been deactivated. Please contact support.',
+            ])->onlyInput('email');
+        }
+
+        // All checks passed — log in
+        auth()->login($user, $request->filled('remember'));
+        $request->session()->regenerate();
+
+        return redirect()->route('vendor.dashboard');
     }
 
     /**

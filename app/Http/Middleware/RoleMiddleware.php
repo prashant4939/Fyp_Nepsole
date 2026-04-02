@@ -16,6 +16,11 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         if (!auth()->check()) {
+            // Redirect vendors to vendor login, others to customer login
+            if (in_array('vendor', $roles)) {
+                return redirect()->route('vendor.login')
+                    ->withErrors(['email' => 'Please login to access the vendor dashboard.']);
+            }
             return redirect()->route('login');
         }
 
