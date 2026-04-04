@@ -69,7 +69,17 @@
 <body>
     <div class="container">
         <div class="logo">
-            <div class="logo-text">🛍️ NepSole</div>
+            <div style="display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+                <div style="width:40px;height:40px;background:#6366f1;border-radius:9px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="13" height="13" rx="2.5" stroke="white" stroke-width="2.2" fill="none"/>
+                        <rect x="20" y="3" width="13" height="7" rx="2.5" stroke="white" stroke-width="2.2" fill="none"/>
+                        <rect x="20" y="14" width="13" height="16" rx="2.5" stroke="white" stroke-width="2.2" fill="none"/>
+                        <rect x="3" y="20" width="13" height="13" rx="2.5" stroke="white" stroke-width="2.2" fill="none"/>
+                    </svg>
+                </div>
+                <span class="logo-text">NepSole</span>
+            </div>
         </div>
         
         <h1>Verify Your Email Address</h1>

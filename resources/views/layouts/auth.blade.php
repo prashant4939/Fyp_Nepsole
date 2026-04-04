@@ -39,20 +39,18 @@
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             background: #6366f1;
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 24px;
         }
 
         .logo-text {
             font-size: 28px;
-            font-weight: 600;
+            font-weight: 700;
             color: #6366f1;
         }
 
@@ -173,7 +171,14 @@
 <body>
     <div class="auth-container">
         <div class="logo">
-            <div class="logo-icon">🛍️</div>
+            <div class="logo-icon">
+                <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="13" height="13" rx="2.5" stroke="white" stroke-width="2" fill="none"/>
+                    <rect x="20" y="3" width="13" height="7" rx="2.5" stroke="white" stroke-width="2" fill="none"/>
+                    <rect x="20" y="14" width="13" height="16" rx="2.5" stroke="white" stroke-width="2" fill="none"/>
+                    <rect x="3" y="20" width="13" height="13" rx="2.5" stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+            </div>
             <div class="logo-text">NepSole</div>
         </div>
         

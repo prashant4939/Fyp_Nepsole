@@ -97,6 +97,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         // Customer Management Routes
         Route::get('/customers', [\App\Http\Controllers\Admin\CustomerController::class, 'index'])->name('customers.index');
+        Route::patch('/customers/{id}/toggle', [\App\Http\Controllers\Admin\CustomerController::class, 'toggle'])->name('customers.toggle');
+        Route::delete('/customers/{id}', [\App\Http\Controllers\Admin\CustomerController::class, 'destroy'])->name('customers.destroy');
     });
 });
 

@@ -317,7 +317,8 @@ function addToCart() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
+            'Accept': 'application/json'
         },
         body: JSON.stringify({
             product_id: <?php echo e($product->id); ?>,
@@ -325,8 +326,15 @@ function addToCart() {
             quantity: quantity
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.status === 401) {
+            window.location.href = '<?php echo e(route('login')); ?>';
+            return;
+        }
+        return response.json();
+    })
     .then(data => {
+        if (!data) return;
         if (data.success) {
             showNotification(data.message, 'success');
             updateCartCount();
@@ -338,7 +346,7 @@ function addToCart() {
     })
     .catch(error => {
         console.error('Error:', error);
-        showNotification('Failed to add to cart', 'error');
+        showNotification('Failed to add to cart. Please try again.', 'error');
         btn.disabled = false;
     });
 }

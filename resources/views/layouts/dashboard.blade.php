@@ -48,7 +48,14 @@
         }
 
         .sidebar-logo-icon {
-            font-size: 24px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .sidebar-logo-text {
@@ -387,7 +394,14 @@
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">
-                    <div class="sidebar-logo-icon">🛍️</div>
+                    <div class="sidebar-logo-icon">
+                        <svg width="22" height="22" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="13" height="13" rx="2.5" stroke="white" stroke-width="2.2" fill="none"/>
+                            <rect x="20" y="3" width="13" height="7" rx="2.5" stroke="white" stroke-width="2.2" fill="none"/>
+                            <rect x="20" y="14" width="13" height="16" rx="2.5" stroke="white" stroke-width="2.2" fill="none"/>
+                            <rect x="3" y="20" width="13" height="13" rx="2.5" stroke="white" stroke-width="2.2" fill="none"/>
+                        </svg>
+                    </div>
                     <div class="sidebar-logo-text">NepSole</div>
                 </div>
                 <div class="sidebar-title">@yield('panel-name', 'Dashboard')</div>
