@@ -90,18 +90,18 @@ class User extends Authenticatable
     }
 
     /**
-     * Orders where user is customer
+     * Orders placed by this user (as customer)
      */
-    public function ordersAsCustomer()
+    public function orders()
     {
-        return $this->hasMany(Order::class, 'customer_id');
+        return $this->hasMany(Order::class, 'user_id');
     }
 
     /**
-     * Orders where user is vendor
+     * Alias for orders - kept for compatibility
      */
-    public function ordersAsVendor()
+    public function ordersAsCustomer()
     {
-        return $this->hasMany(Order::class, 'vendor_id');
+        return $this->hasMany(Order::class, 'user_id');
     }
 }

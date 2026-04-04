@@ -378,7 +378,7 @@
                     </td>
 
                     <td>
-                        <span style="font-weight:600;">{{ $customer->orders_as_customer_count }}</span>
+                        <span style="font-weight:600;">{{ $customer->orders_count }}</span>
                         <span style="color:#9ca3af;font-size:12px;"> orders</span>
                     </td>
 

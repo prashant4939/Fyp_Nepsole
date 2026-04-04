@@ -11,7 +11,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = User::where('role', 'customer')
-            ->withCount('ordersAsCustomer')
+            ->withCount('orders')
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
