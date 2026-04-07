@@ -51,7 +51,10 @@ Route::middleware('auth')->group(function () {
 // Checkout and Order routes
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [\App\Http\Controllers\Customer\CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/place-order', [\App\Http\Controllers\Customer\CheckoutController::class, 'placeOrder'])->name('checkout.place-order');
+
+    // Payment routes (COD + Khalti)
+    Route::post('/checkout/place-order', [\App\Http\Controllers\Customer\PaymentController::class, 'placeOrder'])->name('checkout.place-order');
+    Route::get('/khalti/callback', [\App\Http\Controllers\Customer\PaymentController::class, 'khaltiCallback'])->name('payment.khalti.callback');
     
     Route::get('/orders', [\App\Http\Controllers\Customer\OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [\App\Http\Controllers\Customer\OrderController::class, 'show'])->name('orders.show');
