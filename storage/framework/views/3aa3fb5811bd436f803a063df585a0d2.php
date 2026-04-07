@@ -1,14 +1,14 @@
-@extends('layouts.app')
 
-@section('title', 'Checkout - NepSole')
 
-@section('content')
-<link rel="stylesheet" href="{{ asset('css/checkout.css') }}">
+<?php $__env->startSection('title', 'Checkout - NepSole'); ?>
+
+<?php $__env->startSection('content'); ?>
+<link rel="stylesheet" href="<?php echo e(asset('css/checkout.css')); ?>">
 <div class="checkout-page">
     <div class="container">
         <div class="page-header">
             <h1>Checkout</h1>
-            <a href="{{ route('cart.index') }}" class="back-link">
+            <a href="<?php echo e(route('cart.index')); ?>" class="back-link">
                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
@@ -29,51 +29,51 @@
                         Shipping Address
                     </h2>
 
-                    @if($shippingAddresses->count() > 0)
+                    <?php if($shippingAddresses->count() > 0): ?>
                         <p class="section-hint">Select a shipping address or add a new one</p>
                         
                         <!-- Show only default address initially -->
                         <div id="defaultAddressView">
-                            @if($defaultAddress)
-                                <div class="address-card default selected" data-address-id="{{ $defaultAddress->id }}">
+                            <?php if($defaultAddress): ?>
+                                <div class="address-card default selected" data-address-id="<?php echo e($defaultAddress->id); ?>">
                                     <input type="radio" 
                                            name="shipping_address_id" 
-                                           value="{{ $defaultAddress->id }}" 
-                                           id="address-{{ $defaultAddress->id }}"
+                                           value="<?php echo e($defaultAddress->id); ?>" 
+                                           id="address-<?php echo e($defaultAddress->id); ?>"
                                            checked>
-                                    <label for="address-{{ $defaultAddress->id }}">
+                                    <label for="address-<?php echo e($defaultAddress->id); ?>">
                                         <div class="address-header">
                                             <div class="address-title">
                                                 <div class="radio-indicator"></div>
-                                                <strong>{{ $defaultAddress->full_name }}</strong>
+                                                <strong><?php echo e($defaultAddress->full_name); ?></strong>
                                             </div>
                                             <span class="default-badge">Default</span>
                                         </div>
-                                        <p class="address-phone">📞 {{ $defaultAddress->phone }}</p>
-                                        <p class="address-text">📍 {{ $defaultAddress->address }}</p>
-                                        <p class="address-city">🏙️ {{ $defaultAddress->city }}@if($defaultAddress->landmark), {{ $defaultAddress->landmark }}@endif</p>
+                                        <p class="address-phone">📞 <?php echo e($defaultAddress->phone); ?></p>
+                                        <p class="address-text">📍 <?php echo e($defaultAddress->address); ?></p>
+                                        <p class="address-city">🏙️ <?php echo e($defaultAddress->city); ?><?php if($defaultAddress->landmark): ?>, <?php echo e($defaultAddress->landmark); ?><?php endif; ?></p>
                                     </label>
                                 </div>
-                            @else
-                                <div class="address-card selected" data-address-id="{{ $shippingAddresses->first()->id }}">
+                            <?php else: ?>
+                                <div class="address-card selected" data-address-id="<?php echo e($shippingAddresses->first()->id); ?>">
                                     <input type="radio" 
                                            name="shipping_address_id" 
-                                           value="{{ $shippingAddresses->first()->id }}" 
-                                           id="address-{{ $shippingAddresses->first()->id }}"
+                                           value="<?php echo e($shippingAddresses->first()->id); ?>" 
+                                           id="address-<?php echo e($shippingAddresses->first()->id); ?>"
                                            checked>
-                                    <label for="address-{{ $shippingAddresses->first()->id }}">
+                                    <label for="address-<?php echo e($shippingAddresses->first()->id); ?>">
                                         <div class="address-header">
                                             <div class="address-title">
                                                 <div class="radio-indicator"></div>
-                                                <strong>{{ $shippingAddresses->first()->full_name }}</strong>
+                                                <strong><?php echo e($shippingAddresses->first()->full_name); ?></strong>
                                             </div>
                                         </div>
-                                        <p class="address-phone">📞 {{ $shippingAddresses->first()->phone }}</p>
-                                        <p class="address-text">📍 {{ $shippingAddresses->first()->address }}</p>
-                                        <p class="address-city">🏙️ {{ $shippingAddresses->first()->city }}@if($shippingAddresses->first()->landmark), {{ $shippingAddresses->first()->landmark }}@endif</p>
+                                        <p class="address-phone">📞 <?php echo e($shippingAddresses->first()->phone); ?></p>
+                                        <p class="address-text">📍 <?php echo e($shippingAddresses->first()->address); ?></p>
+                                        <p class="address-city">🏙️ <?php echo e($shippingAddresses->first()->city); ?><?php if($shippingAddresses->first()->landmark): ?>, <?php echo e($shippingAddresses->first()->landmark); ?><?php endif; ?></p>
                                     </label>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                             
                             <div class="address-actions">
                                 <button type="button" class="change-address-btn" onclick="showAllAddresses()">
@@ -94,31 +94,31 @@
                         <!-- All addresses view (hidden by default) -->
                         <div id="allAddressesView" style="display: none;">
                             <div class="address-list">
-                                @foreach($shippingAddresses as $address)
-                                    <div class="address-card {{ $address->is_default ? 'default' : '' }} {{ $address->is_default || (!$defaultAddress && $loop->first) ? 'selected' : '' }}" 
-                                         data-address-id="{{ $address->id }}"
-                                         onclick="selectAddress({{ $address->id }})">
+                                <?php $__currentLoopData = $shippingAddresses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $address): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="address-card <?php echo e($address->is_default ? 'default' : ''); ?> <?php echo e($address->is_default || (!$defaultAddress && $loop->first) ? 'selected' : ''); ?>" 
+                                         data-address-id="<?php echo e($address->id); ?>"
+                                         onclick="selectAddress(<?php echo e($address->id); ?>)">
                                         <input type="radio" 
                                                name="shipping_address_id_all" 
-                                               value="{{ $address->id }}" 
-                                               id="address-all-{{ $address->id }}"
-                                               {{ $address->is_default || (!$defaultAddress && $loop->first) ? 'checked' : '' }}>
-                                        <label for="address-all-{{ $address->id }}">
+                                               value="<?php echo e($address->id); ?>" 
+                                               id="address-all-<?php echo e($address->id); ?>"
+                                               <?php echo e($address->is_default || (!$defaultAddress && $loop->first) ? 'checked' : ''); ?>>
+                                        <label for="address-all-<?php echo e($address->id); ?>">
                                             <div class="address-header">
                                                 <div class="address-title">
                                                     <div class="radio-indicator"></div>
-                                                    <strong>{{ $address->full_name }}</strong>
+                                                    <strong><?php echo e($address->full_name); ?></strong>
                                                 </div>
-                                                @if($address->is_default)
+                                                <?php if($address->is_default): ?>
                                                     <span class="default-badge">Default</span>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
-                                            <p class="address-phone">📞 {{ $address->phone }}</p>
-                                            <p class="address-text">📍 {{ $address->address }}</p>
-                                            <p class="address-city">🏙️ {{ $address->city }}@if($address->landmark), {{ $address->landmark }}@endif</p>
+                                            <p class="address-phone">📞 <?php echo e($address->phone); ?></p>
+                                            <p class="address-text">📍 <?php echo e($address->address); ?></p>
+                                            <p class="address-city">🏙️ <?php echo e($address->city); ?><?php if($address->landmark): ?>, <?php echo e($address->landmark); ?><?php endif; ?></p>
                                         </label>
                                     </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                             
                             <div class="address-actions">
@@ -136,7 +136,7 @@
                                 </button>
                             </div>
                         </div>
-                    @else
+                    <?php else: ?>
                         <div class="no-address-state">
                             <svg width="60" height="60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -150,13 +150,13 @@
                                 Add Shipping Address
                             </button>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <!-- Add Address Form (Hidden by default) -->
                     <div class="add-address-form" id="addAddressForm" style="display: none;">
                         <h3>Add New Address</h3>
                         <form id="addressForm">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Full Name *</label>
@@ -250,38 +250,38 @@
                 <h2>Order Summary</h2>
                 
                 <div class="summary-items">
-                    @foreach($cartItems as $item)
+                    <?php $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="summary-item">
                             <div class="item-image">
-                                @if($item->product->images->count() > 0)
-                                    <img src="{{ asset('storage/' . $item->product->images->first()->image) }}" alt="{{ $item->product->name }}">
-                                @endif
+                                <?php if($item->product->images->count() > 0): ?>
+                                    <img src="<?php echo e(asset('storage/' . $item->product->images->first()->image)); ?>" alt="<?php echo e($item->product->name); ?>">
+                                <?php endif; ?>
                             </div>
                             <div class="item-details">
-                                <p class="item-name">{{ $item->product->name }}</p>
-                                @if($item->variant)
-                                    <p class="item-size">Size: {{ $item->variant->size }}</p>
-                                @endif
-                                <p class="item-qty">Qty: {{ $item->quantity }}</p>
+                                <p class="item-name"><?php echo e($item->product->name); ?></p>
+                                <?php if($item->variant): ?>
+                                    <p class="item-size">Size: <?php echo e($item->variant->size); ?></p>
+                                <?php endif; ?>
+                                <p class="item-qty">Qty: <?php echo e($item->quantity); ?></p>
                             </div>
-                            <p class="item-price">Rs. {{ number_format($item->quantity * $item->product->price, 2) }}</p>
+                            <p class="item-price">Rs. <?php echo e(number_format($item->quantity * $item->product->price, 2)); ?></p>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
 
                 <div class="summary-totals">
                     <div class="summary-row">
-                        <span>Subtotal ({{ $cartItems->sum('quantity') }} items)</span>
-                        <span>Rs. {{ number_format($subtotal, 2) }}</span>
+                        <span>Subtotal (<?php echo e($cartItems->sum('quantity')); ?> items)</span>
+                        <span>Rs. <?php echo e(number_format($subtotal, 2)); ?></span>
                     </div>
                     <div class="summary-row">
-                        <span>Shipping ({{ $cartItems->count() }} {{ Str::plural('product', $cartItems->count()) }} × Rs. 100)</span>
-                        <span>Rs. {{ number_format($shippingFee, 2) }}</span>
+                        <span>Shipping (<?php echo e($cartItems->count()); ?> <?php echo e(Str::plural('product', $cartItems->count())); ?> × Rs. 100)</span>
+                        <span>Rs. <?php echo e(number_format($shippingFee, 2)); ?></span>
                     </div>
                     <div class="summary-divider"></div>
                     <div class="summary-row total">
                         <span>Total</span>
-                        <span>Rs. {{ number_format($total, 2) }}</span>
+                        <span>Rs. <?php echo e(number_format($total, 2)); ?></span>
                     </div>
                 </div>
 
@@ -304,7 +304,7 @@
 </div>
 
 <script>
-let selectedAddressId = {{ $defaultAddress ? $defaultAddress->id : ($shippingAddresses->count() > 0 ? $shippingAddresses->first()->id : 'null') }};
+let selectedAddressId = <?php echo e($defaultAddress ? $defaultAddress->id : ($shippingAddresses->count() > 0 ? $shippingAddresses->first()->id : 'null')); ?>;
 
 function showAllAddresses() {
     document.getElementById('defaultAddressView').style.display = 'none';
@@ -431,7 +431,7 @@ document.getElementById('addressForm').addEventListener('submit', function(e) {
     btn.disabled = true;
     btn.textContent = 'Saving...';
     
-    fetch('{{ route('shipping-address.store') }}', {
+    fetch('<?php echo e(route('shipping-address.store')); ?>', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -478,7 +478,7 @@ function placeOrder() {
         ? '<span>Redirecting to Khalti...</span>'
         : '<span>Processing...</span>';
 
-    fetch('{{ route('checkout.place-order') }}', {
+    fetch('<?php echo e(route('checkout.place-order')); ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -553,4 +553,6 @@ function showNotification(message, type = 'success') {
 }
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\Nepsole\resources\views/customer/checkout/index.blade.php ENDPATH**/ ?>
