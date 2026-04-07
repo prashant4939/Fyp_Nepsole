@@ -90,6 +90,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get shipping addresses for this user.
+     */
+    public function shippingAddresses()
+    {
+        return $this->hasMany(\App\Models\ShippingAddress::class);
+    }
+
+    /**
      * Orders placed by this user (as customer)
      */
     public function orders()
