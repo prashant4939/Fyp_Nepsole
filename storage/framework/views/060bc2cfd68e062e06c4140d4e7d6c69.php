@@ -94,6 +94,12 @@
         justify-content: center;
         font-size: 4rem;
         position: relative;
+        overflow: hidden;
+    }
+
+    .product-image-link {
+        display: block;
+        text-decoration: none;
     }
 
     .product-badge {
@@ -173,75 +179,52 @@
 
 <section class="featured-section" id="products">
     <h2 class="section-title">Featured Products</h2>
-    
+
     <div class="products-grid">
-        <div class="product-card">
-            <div class="product-image" style="background: linear-gradient(135deg, #1e3a2e, #2d5a45);">
-                👢
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">Classic Dhakal Leather Boots</h3>
-                <p class="product-price">Rs. 2,999</p>
-                <a href="#" class="product-btn">View Product</a>
-            </div>
-        </div>
+        <?php $__empty_1 = true; $__currentLoopData = $featuredProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <div class="product-card">
+                <a href="<?php echo e(route('products.show', $product)); ?>" class="product-image-link">
+                    <div class="product-image">
+                        <?php if($product->images->count() > 0): ?>
+                            <img src="<?php echo e(asset('storage/' . $product->images->first()->image)); ?>"
+                                 alt="<?php echo e($product->name); ?>"
+                                 style="width:100%;height:100%;object-fit:cover;">
+                        <?php else: ?>
+                            <span style="font-size:4rem;">👟</span>
+                        <?php endif; ?>
+                        <?php if($product->created_at->diffInDays() <= 7): ?>
+                            <span class="product-badge">NEW</span>
+                        <?php endif; ?>
+                    </div>
+                </a>
+                <div class="product-info">
+                    <?php if($product->brand): ?>
+                        <p style="font-size:11px;color:#9ca3af;margin-bottom:4px;font-weight:600;text-transform:uppercase;">
+                            <?php echo e($product->brand->name); ?>
 
-        <div class="product-card">
-            <div class="product-image" style="background: linear-gradient(135deg, #e5e7eb, #d1d5db);">
-                👟
+                        </p>
+                    <?php endif; ?>
+                    <h3 class="product-name"><?php echo e($product->name); ?></h3>
+                    <p class="product-price">Rs. <?php echo e(number_format($product->price, 2)); ?></p>
+                    <a href="<?php echo e(route('products.show', $product)); ?>" class="product-btn">View Product</a>
+                </div>
             </div>
-            <div class="product-info">
-                <h3 class="product-name">Modern Everest Sneakers</h3>
-                <p class="product-price">Rs. 3,499</p>
-                <a href="#" class="product-btn">View Product</a>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#9ca3af;">
+                <p style="font-size:1.125rem;">No products available yet. Check back soon!</p>
+                <a href="<?php echo e(route('products.index')); ?>" style="color:#6366f1;font-weight:600;">Browse All Products</a>
             </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-image" style="background: linear-gradient(135deg, #d4a574, #c89456);">
-                🥿
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">Handwoven Himalayan Sandals</h3>
-                <p class="product-price">Rs. 1,899</p>
-                <a href="#" class="product-btn">View Product</a>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-image" style="background: linear-gradient(135deg, #f3f4f6, #e5e7eb);">
-                👟
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">Caliber Shoes WHITE/GRN</h3>
-                <p class="product-price">Rs. 2,599</p>
-                <a href="#" class="product-btn">View Product</a>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-image" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
-                👟
-                <span class="product-badge">NEW</span>
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">Goldstar Sneaks</h3>
-                <p class="product-price">Rs. 2,299</p>
-                <a href="#" class="product-btn">View Product</a>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-image" style="background: linear-gradient(135deg, #d4a574, #b8956a);">
-                🥾
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">Durable Sherpa Hikers</h3>
-                <p class="product-price">Rs. 4,199</p>
-                <a href="#" class="product-btn">View Product</a>
-            </div>
-        </div>
+        <?php endif; ?>
     </div>
+
+    <?php if($featuredProducts->count() >= 8): ?>
+        <div style="text-align:center;margin-top:2.5rem;">
+            <a href="<?php echo e(route('products.index')); ?>"
+               style="display:inline-block;padding:0.875rem 2.5rem;background:#6366f1;color:white;border-radius:50px;font-weight:600;text-decoration:none;transition:all 0.2s;">
+                View All Products →
+            </a>
+        </div>
+    <?php endif; ?>
 </section>
 <?php $__env->stopSection(); ?>
 

@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Checkout - NepSole'); ?>
 
 <?php $__env->startSection('content'); ?>

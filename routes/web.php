@@ -18,9 +18,7 @@ use App\Http\Controllers\Customer\DashboardController as CustomerDashboard;
 use App\Http\Controllers\Customer\ProductController as CustomerProductController;
 use App\Http\Controllers\Customer\CartController;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 
 // Public product routes
 Route::get('/products', [CustomerProductController::class, 'index'])->name('products.index');
