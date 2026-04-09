@@ -32,7 +32,7 @@
             
             <div class="top-right">
                 @guest
-                    <a href="{{ route('vendor.portal') }}" class="become-vendor-btn">Become Vendor</a>
+                    <a href="{{ route('vendor-request.create') }}" class="become-vendor-btn">Become Vendor</a>
                 @endguest
                 <div class="user-actions">
                     @guest
