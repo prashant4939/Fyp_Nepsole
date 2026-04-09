@@ -8,7 +8,7 @@
 
 <div class="nav-section">
     <div class="nav-section-title">Management</div>
-    <a href="{{ route('admin.vendors.index') }}" class="nav-link {{ request()->routeIs('admin.vendors.*') ? 'active' : '' }}">
+    <a href="{{ route('admin.vendors.index') }}" class="nav-link {{ request()->routeIs('admin.vendors.*') || request()->routeIs('admin.vendor-requests.*') ? 'active' : '' }}">
         <span class="nav-icon">👥</span>
         Vendor Management
     </a>

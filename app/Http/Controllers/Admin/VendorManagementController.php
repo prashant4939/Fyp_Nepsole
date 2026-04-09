@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use App\Models\User;
+use App\Models\VendorRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -25,7 +26,9 @@ class VendorManagementController extends Controller
             ->latest()
             ->get();
 
-        return view('admin.vendors.index', compact('pendingVendors', 'approvedVendors'));
+        $vendorRequests = VendorRequest::latest()->get();
+
+        return view('admin.vendors.index', compact('pendingVendors', 'approvedVendors', 'vendorRequests'));
     }
 
     /**

@@ -17,8 +17,14 @@ use App\Http\Controllers\Vendor\CategoryBrandController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboard;
 use App\Http\Controllers\Customer\ProductController as CustomerProductController;
 use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\VendorRequestController;
+use App\Http\Controllers\Admin\VendorRequestController as AdminVendorRequestController;
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
+
+// Become a Vendor (public)
+Route::get('/become-a-vendor', [VendorRequestController::class, 'create'])->name('vendor-request.create');
+Route::post('/become-a-vendor', [VendorRequestController::class, 'store'])->name('vendor-request.store');
 
 // Public product routes
 Route::get('/products', [CustomerProductController::class, 'index'])->name('products.index');
@@ -100,6 +106,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/customers', [\App\Http\Controllers\Admin\CustomerController::class, 'index'])->name('customers.index');
         Route::patch('/customers/{id}/toggle', [\App\Http\Controllers\Admin\CustomerController::class, 'toggle'])->name('customers.toggle');
         Route::delete('/customers/{id}', [\App\Http\Controllers\Admin\CustomerController::class, 'destroy'])->name('customers.destroy');
+
+        // Vendor Request Management Routes
+        Route::get('/vendor-requests', [AdminVendorRequestController::class, 'index'])->name('vendor-requests.index');
+        Route::get('/vendor-requests/{vendorRequest}', [AdminVendorRequestController::class, 'show'])->name('vendor-requests.show');
+        Route::post('/vendor-requests/{vendorRequest}/approve', [AdminVendorRequestController::class, 'approve'])->name('vendor-requests.approve');
+        Route::post('/vendor-requests/{vendorRequest}/reject', [AdminVendorRequestController::class, 'reject'])->name('vendor-requests.reject');
     });
 });
 
