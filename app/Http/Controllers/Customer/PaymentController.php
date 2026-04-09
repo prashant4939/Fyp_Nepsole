@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewOrderForVendor;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ShippingAddress;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -247,6 +250,27 @@ class PaymentController extends Controller
 
             $item->variant->decrement('stock', $item->quantity);
             $item->product->increment('sold', $item->quantity);
+        }
+
+        // Notify each vendor about their items in this order
+        $this->notifyVendors($order);
+    }
+
+    private function notifyVendors(Order $order): void
+    {
+        $order->load('orderItems.product', 'shippingAddress', 'user');
+
+        $vendorIds = $order->orderItems->pluck('vendor_id')->unique();
+
+        foreach ($vendorIds as $vendorId) {
+            $vendor = Vendor::with('user')->find($vendorId);
+            if ($vendor && $vendor->user && $vendor->user->email) {
+                try {
+                    Mail::to($vendor->user->email)->send(new NewOrderForVendor($order, $vendor));
+                } catch (\Exception $e) {
+                    Log::error("Vendor order notification failed (vendor #{$vendorId}): " . $e->getMessage());
+                }
+            }
         }
     }
 }

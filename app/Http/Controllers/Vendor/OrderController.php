@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderItemConfirmed;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -95,6 +97,17 @@ class OrderController extends Controller
             }
 
             DB::commit();
+
+            // Send confirmation email to customer when vendor confirms
+            if ($request->status === 'confirmed') {
+                try {
+                    $order->load('user', 'shippingAddress');
+                    $orderItem->load('product');
+                    Mail::to($order->user->email)->send(new OrderItemConfirmed($order, $orderItem));
+                } catch (\Exception $e) {
+                    \Log::error('Order confirmation email failed: ' . $e->getMessage());
+                }
+            }
 
             $message = $request->status === 'confirmed' 
                 ? 'Order item confirmed successfully.' 
