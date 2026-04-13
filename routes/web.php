@@ -22,6 +22,9 @@ use App\Http\Controllers\Admin\VendorRequestController as AdminVendorRequestCont
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 
+// Static pages
+Route::get('/about', [\App\Http\Controllers\PageController::class, 'about'])->name('about');
+
 // Become a Vendor (public)
 Route::get('/become-a-vendor', [VendorRequestController::class, 'create'])->name('vendor-request.create');
 Route::post('/become-a-vendor', [VendorRequestController::class, 'store'])->name('vendor-request.store');

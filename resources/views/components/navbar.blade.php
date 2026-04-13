@@ -134,6 +134,7 @@
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="{{ route('products.index') }}" class="nav-link">Products</a>
+                <a href="{{ route('about') }}" class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}">About Us</a>
                 <div class="dropdown">
                     @php
                         $currentCategoryId = request('category') ?? request()->route('category')?->id;
@@ -486,6 +487,11 @@
 
     .nav-link:hover {
         color: #6366f1;
+    }
+
+    .nav-link.active {
+        color: #6366f1;
+        font-weight: 600;
     }
 
     /* Dropdown Styles */

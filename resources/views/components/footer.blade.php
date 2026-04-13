@@ -13,7 +13,7 @@
                     </div>
                     <span class="logo-text">NepSole</span>
                 </div>
-                <p class="footer-tagline">Discover the finest Nepali footwear</p>
+                <p class="footer-tagline">Nepal's multi-vendor footwear marketplace — connecting local vendors with customers nationwide.</p>
                 <div class="social-links">
                     <a href="#" class="social-icon">📘</a>
                     <a href="#" class="social-icon">📷</a>
@@ -25,7 +25,7 @@
             <div class="footer-section">
                 <h4 class="footer-title">Company</h4>
                 <ul class="footer-links">
-                    <li><a href="#">About Us</a></li>
+                    <li><a href="{{ route('about') }}">About Us</a></li>
                     <li><a href="#">Contact</a></li>
                     <li><a href="#">Careers</a></li>
                 </ul>
