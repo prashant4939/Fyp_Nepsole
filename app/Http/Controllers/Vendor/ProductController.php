@@ -162,7 +162,13 @@ class ProductController extends Controller
             foreach ($request->delete_variants as $variantId) {
                 $variant = ProductVariant::find($variantId);
                 if ($variant && $variant->productImage->product_id == $product->id) {
-                    $variant->delete();
+                    // Check for active orders before deleting
+                    $hasOrders = \App\Models\OrderItem::where('product_variant_id', $variant->id)
+                        ->whereIn('status', ['pending', 'confirmed'])
+                        ->exists();
+                    if (!$hasOrders) {
+                        $variant->delete();
+                    }
                 }
             }
         }
@@ -335,6 +341,16 @@ class ProductController extends Controller
     {
         if ($product->vendor_id !== auth()->user()->vendor->id) {
             abort(403, 'Unauthorized action.');
+        }
+
+        // Prevent deletion if variant has active orders
+        $hasOrders = \App\Models\OrderItem::where('product_variant_id', $variant->id)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->exists();
+
+        if ($hasOrders) {
+            return redirect()->route('vendor.products.edit', $product)
+                ->with('error', 'Cannot delete this size — it has active orders associated with it.');
         }
 
         $variant->delete();
