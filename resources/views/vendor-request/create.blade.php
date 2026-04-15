@@ -9,8 +9,9 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f9fafb;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         .container {
@@ -21,12 +22,12 @@
 
         .back-link {
             display: inline-block;
-            color: #6366f1;
+            color: #fff;
             text-decoration: none;
             margin-bottom: 1rem;
             font-weight: 500;
         }
-        .back-link:hover { text-decoration: underline; }
+        .back-link:hover { text-decoration: underline; color: #e0e7ff; }
 
         .form-card {
             background: white;

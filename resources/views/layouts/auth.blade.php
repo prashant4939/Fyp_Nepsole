@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #000;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;

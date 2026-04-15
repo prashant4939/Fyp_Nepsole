@@ -72,7 +72,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -164,7 +164,7 @@
 
         .form-group input:focus {
             outline: none;
-            border-color: #10b981;
+            border-color: #6366f1;
         }
 
         .form-options {
@@ -189,7 +189,7 @@
         }
 
         .forgot-link {
-            color: #10b981;
+            color: #6366f1;
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
@@ -197,14 +197,14 @@
         }
 
         .forgot-link:hover {
-            color: #059669;
+            color: #4f46e5;
             text-decoration: underline;
         }
 
         .btn-login {
             width: 100%;
             padding: 14px;
-            background: #10b981;
+            background: #6366f1;
             color: white;
             border: none;
             border-radius: 8px;
@@ -215,7 +215,7 @@
         }
 
         .btn-login:hover {
-            background: #059669;
+            background: #4f46e5;
         }
 
         .register-section {
@@ -231,14 +231,14 @@
         }
 
         .register-section a {
-            color: #10b981;
+            color: #6366f1;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s;
         }
 
         .register-section a:hover {
-            color: #059669;
+            color: #4f46e5;
             text-decoration: underline;
         }
 
