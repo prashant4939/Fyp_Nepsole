@@ -18,8 +18,8 @@ class VendorRequestController extends Controller
     {
         $request->validate([
             'name'              => 'required|string|max:255',
-            'email'             => 'required|email|max:255|unique:vendor_requests,email|unique:users,email',
-            'phone'             => 'required|string|max:20',
+            'email'             => 'required|email|max:255|unique:vendor_requests,email',
+            'phone'             => 'required|digits_between:7,15',
             'shop_name'         => 'required|string|max:255',
             'address'           => 'required|string|max:500',
             'citizenship_photo' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
