@@ -22,15 +22,10 @@ class CustomerController extends Controller
     {
         $customer = User::where('role', 'customer')->findOrFail($id);
 
-        if ($customer->email_verified_at) {
-            $customer->email_verified_at = null;
-            $message = 'Customer disabled successfully.';
-        } else {
-            $customer->email_verified_at = now();
-            $message = 'Customer enabled successfully.';
-        }
-
+        $customer->is_active = !$customer->is_active;
         $customer->save();
+
+        $message = $customer->is_active ? 'Customer enabled successfully.' : 'Customer disabled successfully.';
 
         return back()->with('success', $message);
     }

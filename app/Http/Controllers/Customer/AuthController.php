@@ -53,6 +53,14 @@ class AuthController extends Controller
             $request->session()->regenerate();
             
             $user = Auth::user();
+
+            // Block disabled customers
+            if ($user->role === 'customer' && !$user->is_active) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Your account has been disabled. Please contact support.',
+                ])->onlyInput('email');
+            }
             
             // Redirect based on role - customer login always goes to home page
             if ($user->role === 'customer' || $user->role === 'vendor') {

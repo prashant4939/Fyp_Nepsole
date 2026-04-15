@@ -320,14 +320,14 @@
         <div class="stat-mini-icon" style="background:#d1fae5;">✓</div>
         <div>
             <div class="stat-mini-label">Active</div>
-            <div class="stat-mini-value">{{ $customers->getCollection()->where('email_verified_at', '!=', null)->count() }}</div>
+            <div class="stat-mini-value">{{ $customers->getCollection()->where('is_active', true)->count() }}</div>
         </div>
     </div>
     <div class="stat-mini">
         <div class="stat-mini-icon" style="background:#fee2e2;">✗</div>
         <div>
             <div class="stat-mini-label">Inactive</div>
-            <div class="stat-mini-value">{{ $customers->getCollection()->whereNull('email_verified_at')->count() }}</div>
+            <div class="stat-mini-value">{{ $customers->getCollection()->where('is_active', false)->count() }}</div>
         </div>
     </div>
 </div>
@@ -383,7 +383,7 @@
                     </td>
 
                     <td>
-                        @if($customer->email_verified_at)
+                        @if($customer->is_active)
                             <span class="badge badge-active">● Active</span>
                         @else
                             <span class="badge badge-inactive">● Inactive</span>
@@ -398,8 +398,8 @@
                             <form method="POST" action="{{ route('admin.customers.toggle', $customer->id) }}" style="display:inline;">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="action-btn {{ $customer->email_verified_at ? 'btn-disable' : 'btn-enable' }}">
-                                    {{ $customer->email_verified_at ? 'Disable' : 'Enable' }}
+                                <button type="submit" class="action-btn {{ $customer->is_active ? 'btn-disable' : 'btn-enable' }}">
+                                    {{ $customer->is_active ? 'Disable' : 'Enable' }}
                                 </button>
                             </form>
 
