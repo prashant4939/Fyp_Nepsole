@@ -81,6 +81,11 @@
                         <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
                     </a>
                     @auth
+                    <a href="{{ route('orders.index') }}" class="orders-icon" title="My Orders">
+                        📋
+                    </a>
+                    @endauth
+                    @auth
                     <div class="settings-dropdown-wrap">
                         <button class="settings-icon-btn" onclick="toggleSettingsDropdown(event)" title="Settings" aria-label="Settings">
                             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -328,8 +333,18 @@
         position: relative;
     }
 
-    .user-icon:hover, .wishlist-icon:hover, .cart-icon:hover {
+    .user-icon:hover, .wishlist-icon:hover, .cart-icon:hover, .orders-icon:hover {
         background-color: #f3f4f6;
+    }
+
+    .orders-icon {
+        font-size: 20px;
+        text-decoration: none;
+        padding: 8px;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+        cursor: pointer;
+        position: relative;
     }
 
     .cart-badge, .wishlist-badge {

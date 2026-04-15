@@ -45,6 +45,9 @@
                                 @if($item->vendor)
                                     <p class="item-meta">Sold by: {{ $item->vendor->business_name }}</p>
                                 @endif
+                                <span class="item-status-badge status-{{ $item->status }}">
+                                    {{ ucfirst($item->status ?? 'pending') }}
+                                </span>
                             </div>
                             <div class="item-price">
                                 Rs. {{ number_format($item->unit_price * $item->quantity, 2) }}
@@ -210,6 +213,19 @@
 .item-info { flex: 1; }
 .item-name { font-size: 14px; font-weight: 600; color: #111827; margin: 0 0 0.25rem; }
 .item-meta { font-size: 12px; color: #9ca3af; margin: 0.1rem 0; }
+
+.item-status-badge {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.status-pending   { background: #fef3c7; color: #92400e; }
+.status-confirmed { background: #d1fae5; color: #065f46; }
+.status-cancelled { background: #fee2e2; color: #991b1b; }
 
 .item-price { text-align: right; font-size: 15px; font-weight: 700; color: #111827; white-space: nowrap; }
 .unit-price { display: block; font-size: 11px; color: #9ca3af; font-weight: 400; margin-top: 2px; }
