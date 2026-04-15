@@ -14,9 +14,9 @@ class VendorRequestApproved extends Mailable
 
     public string $vendorName;
     public string $shopName;
-    public string $pin;
+    public ?string $pin;
 
-    public function __construct(string $vendorName, string $shopName, string $pin)
+    public function __construct(string $vendorName, string $shopName, ?string $pin)
     {
         $this->vendorName = $vendorName;
         $this->shopName   = $shopName;
